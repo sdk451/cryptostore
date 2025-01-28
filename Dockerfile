@@ -1,8 +1,9 @@
-FROM python:3.9-slim-bullseye
+FROM python:3.11-slim-bullseye
 
 RUN apt update
 RUN apt install gcc git -y
 
+RUN pip install --upgrade pip
 RUN pip install --no-cache-dir cython
 RUN pip install --no-cache-dir cryptofeed
 RUN pip install --no-cache-dir redis

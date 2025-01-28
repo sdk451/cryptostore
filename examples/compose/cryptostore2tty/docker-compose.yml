@@ -3,7 +3,7 @@ services:
   cryptostore2tty:
     image: ghcr.io/bmoscon/cryptostore:latest
     environment:
-      - EXCHANGE=BINANCE
-      - CHANNELS=trades
+      - EXCHANGE=BYBIT
+      - CHANNELS=candles
       - SYMBOLS=BTC-USDT
       - BACKEND=TTY

@@ -1,0 +1,44 @@
+services:
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - crypto_network
+
+  cryptostore:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      redis:
+        condition: service_healthy
+    environment:
+      - EXCHANGE=BYBIT
+      - CHANNELS=candles
+      - SYMBOLS=BTC-USD
+      - BACKEND=REDIS
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SAVE_RAW=False # want to change to True but need to mount a local volume for raw data first i.e. - ./raw_data:/raw_data
+    networks:
+      - crypto_network
+    restart: unless-stopped
+
+networks:
+  crypto_network:
+    driver: bridge
+
+volumes:
+  redis_data:
+    driver: local
+
+      
